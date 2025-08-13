@@ -1,22 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { 
   Plus, 
   Target, 
   TrendingUp, 
-  Calendar, 
   Zap, 
   Star, 
   Coins,
   Trophy,
   Flame,
   BarChart3,
-  Clock,
-  CheckCircle
+  Clock
 } from 'lucide-react';
 import { useGameStore } from '@/stores/gameStore';
-import { Task, TaskCategory } from '@/types';
-import { toast } from 'react-toastify';
+import { TaskCategory } from '@/types';
 
 const Dashboard: React.FC = () => {
   const { 
@@ -28,7 +25,7 @@ const Dashboard: React.FC = () => {
     actions 
   } = useGameStore();
 
-  const [isAddingTask, setIsAddingTask] = useState(false);
+
 
   // Estadísticas calculadas
   const totalTasks = tasks.length;
@@ -64,23 +61,12 @@ const Dashboard: React.FC = () => {
     .slice(0, 5);
 
   const handleAddTask = () => {
-    setIsAddingTask(true);
-    // Aquí podrías abrir un modal para crear tareas
-    toast.info('Funcionalidad de creación de tareas próximamente! 🚀', {
-      position: "top-right",
-      autoClose: 3000,
-    });
+    actions.openTaskModal();
+    // Opcionalmente, podrías navegar a /tasks si quieres mostrar el tablero completo
+    // navigate('/tasks')
   };
 
-  const getCategoryColor = (category: TaskCategory) => {
-    const colors = {
-      productivity: 'from-productivity-500 to-productivity-600',
-      health: 'from-health-500 to-health-600',
-      creative: 'from-creative-500 to-creative-600',
-      social: 'from-social-500 to-social-600'
-    };
-    return colors[category];
-  };
+
 
   const getCategoryIcon = (category: TaskCategory) => {
     const icons = {

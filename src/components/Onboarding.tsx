@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { motion as motion3d } from 'framer-motion-3d';
+import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { 
   User, 
   Target, 
@@ -12,14 +11,14 @@ import {
   Star
 } from 'lucide-react';
 import { useGameStore } from '@/stores/gameStore';
-import { UserProfile, UserSettings } from '@/types';
+import { UserProfile } from '@/types';
 
 const Onboarding: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
     username: '',
     avatar: 'default',
-    difficulty: 'normal' as const,
+    difficulty: 'normal' as 'easy' | 'normal' | 'hard' | 'nightmare',
     notifications: true,
     theme: 'dark' as const
   });
@@ -69,6 +68,16 @@ const Onboarding: React.FC = () => {
     { id: 'nightmare', name: 'Pesadilla', description: 'Solo para los más valientes', color: 'from-red-500 to-red-600' }
   ];
 
+  // Prefill username desde localStorage si existe
+  useEffect(() => {
+    try {
+      const savedUsername = localStorage.getItem('sariola-username');
+      if (savedUsername) {
+        setFormData(prev => ({ ...prev, username: savedUsername }));
+      }
+    } catch {}
+  }, []);
+
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
@@ -115,7 +124,7 @@ const Onboarding: React.FC = () => {
         }
       },
       resources: {
-        he: 6,
+        he: 0,
         heUsedToday: 0,
         heMaxDaily: 6,
         xp: 0,
@@ -227,6 +236,11 @@ const Onboarding: React.FC = () => {
       lastActive: new Date()
     };
 
+    // Guardar username para futuros accesos
+    try {
+      localStorage.setItem('sariola-username', formData.username);
+    } catch {}
+
     actions.login(userProfile);
   };
 
@@ -293,7 +307,11 @@ const Onboarding: React.FC = () => {
               <input
                 type="text"
                 value={formData.username}
-                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setFormData({ ...formData, username: value });
+                  try { localStorage.setItem('sariola-username', value); } catch {}
+                }}
                 placeholder="Ingresa tu nombre de jugador"
                 className="w-full max-w-md px-4 py-3 bg-background-secondary border border-background-card rounded-lg text-surface-primary placeholder-surface-secondary focus:outline-none focus:ring-2 focus:ring-productivity-500"
               />
@@ -337,7 +355,7 @@ const Onboarding: React.FC = () => {
               {difficulties.map((difficulty) => (
                 <button
                   key={difficulty.id}
-                  onClick={() => setFormData({ ...formData, difficulty: difficulty.id })}
+                  onClick={() => setFormData({ ...formData, difficulty: difficulty.id as 'easy' | 'normal' | 'hard' | 'nightmare' })}
                   className={`p-6 rounded-lg border-2 transition-all duration-200 text-left ${
                     formData.difficulty === difficulty.id
                       ? 'border-productivity-500 bg-gradient-to-r ' + difficulty.color

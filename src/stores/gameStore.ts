@@ -4,7 +4,6 @@ import {
   Task, 
   UserProfile, 
   TaskCategory, 
-  TaskStatus, 
   TaskRewards,
   Achievement,
   PenaltyRecord,
@@ -55,7 +54,7 @@ interface GameState {
     logout: () => void;
     
     // Gestión de tareas
-    addTask: (task: Omit<Task, 'id' | 'createdAt' | 'updatedAt'>) => void;
+    addTask: (task: Omit<Task, 'id' | 'createdAt' | 'updatedAt' | 'rewards' | 'completionStreak'>) => void;
     updateTask: (id: string, updates: Partial<Task>) => void;
     deleteTask: (id: string) => void;
     completeTask: (id: string) => void;
@@ -169,7 +168,7 @@ export const useGameStore = create<GameState>()(
       currentTask: null,
       
       resources: {
-        he: 6, // 6 horas por defecto
+        he: 0, // inicia en 0 horas de entretenimiento
         heUsedToday: 0,
         heMaxDaily: 6,
         xp: 0,
@@ -249,15 +248,15 @@ export const useGameStore = create<GameState>()(
             id: crypto.randomUUID(),
             createdAt: new Date(),
             updatedAt: new Date(),
-            completionStreak: 0
+            completionStreak: 0,
+            rewards: { he: 0, xp: 0 } // Se calculará después
           };
           
           const rewards = get().actions.calculateRewards(newTask);
           newTask.rewards = rewards;
           
           set(state => ({
-            tasks: [...state.tasks, newTask],
-            filteredTasks: [...state.filteredTasks, newTask]
+            tasks: [...state.tasks, newTask]
           }));
         },
         
@@ -313,7 +312,8 @@ export const useGameStore = create<GameState>()(
               type: 'success',
               title: '¡Nivel Subido!',
               message: `Has alcanzado el nivel ${state.level[category] + 1} en ${category}`,
-              icon: '🎉'
+              icon: '🎉',
+              isRead: false
             });
           }
           
@@ -332,17 +332,14 @@ export const useGameStore = create<GameState>()(
         // Filtros y búsqueda
         setActiveCategory: (category: TaskCategory | 'all') => {
           set({ activeCategory: category });
-          get().actions.applyFilters();
         },
         
         setSearchQuery: (query: string) => {
           set({ searchQuery: query });
-          get().actions.applyFilters();
         },
         
         toggleShowCompleted: () => {
           set(state => ({ showCompleted: !state.showCompleted }));
-          get().actions.applyFilters();
         },
         
         // Recursos del juego
@@ -485,7 +482,6 @@ export const useGameStore = create<GameState>()(
         
         updateStreaks: () => {
           const today = new Date();
-          const state = get();
           
           set(state => ({
             streaks: {
@@ -500,7 +496,7 @@ export const useGameStore = create<GameState>()(
           set(state => ({
             resources: {
               ...state.resources,
-              he: state.resources.heMaxDaily,
+              he: 0,
               heUsedToday: 0
             }
           }));
@@ -512,13 +508,15 @@ export const useGameStore = create<GameState>()(
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         userProfile: state.userProfile,
+        isAuthenticated: state.isAuthenticated,
         tasks: state.tasks,
         resources: state.resources,
         level: state.level,
         streaks: state.streaks,
         achievements: state.achievements,
         penalties: state.penalties,
-        settings: state.userProfile?.settings
+        settings: state.userProfile?.settings,
+        isLoading: false
       })
     }
   )
