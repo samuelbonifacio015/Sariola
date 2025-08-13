@@ -1,0 +1,392 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: "Inter", system-ui, sans-serif;
+  }
+
+  body {
+    @apply bg-background-primary text-surface-primary;
+    font-family: "Inter", system-ui, sans-serif;
+  }
+
+  * {
+    @apply border-background-card;
+  }
+
+  /* Scrollbar personalizada */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-background-secondary;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-background-tertiary rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-background-card;
+  }
+}
+
+@layer components {
+  /* Botones gamificados */
+  .btn-game {
+    @apply relative overflow-hidden rounded-lg px-6 py-3 font-semibold text-white transition-all duration-300;
+    @apply bg-gradient-to-r from-productivity-600 to-productivity-700;
+    @apply hover:from-productivity-700 hover:to-productivity-800;
+    @apply active:scale-95;
+    @apply shadow-game hover:shadow-game-glow;
+  }
+
+  .btn-game:before {
+    content: "";
+    @apply absolute inset-0 bg-gradient-to-r from-white/20 to-transparent;
+    @apply transform -skew-x-12 -translate-x-full transition-transform duration-500;
+  }
+
+  .btn-game:hover:before {
+    @apply translate-x-full;
+  }
+
+  .btn-game-secondary {
+    @apply relative overflow-hidden rounded-lg px-6 py-3 font-semibold transition-all duration-300;
+    @apply bg-gradient-to-r from-background-secondary to-background-tertiary;
+    @apply text-surface-primary border border-background-card;
+    @apply hover:from-background-tertiary hover:to-background-card;
+    @apply active:scale-95;
+  }
+
+  .btn-game-danger {
+    @apply relative overflow-hidden rounded-lg px-6 py-3 font-semibold text-white transition-all duration-300;
+    @apply bg-gradient-to-r from-red-600 to-red-700;
+    @apply hover:from-red-700 hover:to-red-800;
+    @apply active:scale-95;
+    @apply shadow-error hover:shadow-error;
+  }
+
+  .btn-game-success {
+    @apply relative overflow-hidden rounded-lg px-6 py-3 font-semibold text-white transition-all duration-300;
+    @apply bg-gradient-to-r from-green-600 to-green-700;
+    @apply hover:from-green-700 hover:to-green-800;
+    @apply active:scale-95;
+    @apply shadow-success hover:shadow-success;
+  }
+
+  /* Tarjetas gamificadas */
+  .card-game {
+    @apply bg-background-secondary rounded-xl border border-background-card;
+    @apply shadow-lg hover:shadow-xl transition-all duration-300;
+    @apply backdrop-blur-sm;
+  }
+
+  .card-game:hover {
+    @apply transform -translate-y-1;
+    @apply border-productivity-500/50;
+  }
+
+  .card-game-glow {
+    @apply card-game;
+    @apply shadow-game hover:shadow-game-glow;
+    @apply border-productivity-500/30;
+  }
+
+  /* Indicadores de estado */
+  .status-indicator {
+    @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium;
+  }
+
+  .status-todo {
+    @apply bg-yellow-100 text-yellow-800;
+  }
+
+  .status-in-progress {
+    @apply bg-blue-100 text-blue-800;
+  }
+
+  .status-done {
+    @apply bg-green-100 text-green-800;
+  }
+
+  .status-archived {
+    @apply bg-gray-100 text-gray-800;
+  }
+
+  /* Prioridades */
+  .priority-low {
+    @apply text-green-600 bg-green-100;
+  }
+
+  .priority-medium {
+    @apply text-yellow-600 bg-yellow-100;
+  }
+
+  .priority-high {
+    @apply text-orange-600 bg-orange-100;
+  }
+
+  .priority-critical {
+    @apply text-red-600 bg-red-100;
+  }
+
+  /* Categorías */
+  .category-productivity {
+    @apply text-productivity-600 bg-productivity-100;
+  }
+
+  .category-health {
+    @apply text-health-600 bg-health-100;
+  }
+
+  .category-creative {
+    @apply text-creative-600 bg-creative-100;
+  }
+
+  .category-social {
+    @apply text-social-600 bg-social-100;
+  }
+
+  /* Barras de progreso gamificadas */
+  .progress-bar {
+    @apply w-full bg-background-tertiary rounded-full h-2 overflow-hidden;
+  }
+
+  .progress-fill {
+    @apply h-full transition-all duration-500 ease-out;
+    @apply bg-gradient-to-r from-productivity-500 to-productivity-600;
+  }
+
+  .progress-fill-health {
+    @apply bg-gradient-to-r from-health-500 to-health-600;
+  }
+
+  .progress-fill-creative {
+    @apply bg-gradient-to-r from-creative-500 to-creative-600;
+  }
+
+  .progress-fill-social {
+    @apply bg-gradient-to-r from-social-500 to-social-600;
+  }
+
+  /* Animaciones de entrada */
+  .fade-in {
+    @apply animate-in fade-in duration-500;
+  }
+
+  .slide-in-up {
+    @apply animate-in slide-in-from-bottom-4 duration-500;
+  }
+
+  .slide-in-down {
+    @apply animate-in slide-in-from-top-4 duration-500;
+  }
+
+  .slide-in-left {
+    @apply animate-in slide-in-from-right-4 duration-500;
+  }
+
+  .slide-in-right {
+    @apply animate-in slide-in-from-left-4 duration-500;
+  }
+
+  /* Efectos de hover */
+  .hover-lift {
+    @apply transition-transform duration-300 hover:-translate-y-1;
+  }
+
+  .hover-glow {
+    @apply transition-shadow duration-300 hover:shadow-game;
+  }
+
+  /* Gradientes de texto */
+  .text-gradient {
+    @apply bg-gradient-to-r from-productivity-500 to-creative-500;
+    @apply bg-clip-text text-transparent;
+  }
+
+  .text-gradient-health {
+    @apply bg-gradient-to-r from-health-500 to-health-600;
+    @apply bg-clip-text text-transparent;
+  }
+
+  .text-gradient-creative {
+    @apply bg-gradient-to-r from-creative-500 to-creative-600;
+    @apply bg-clip-text text-transparent;
+  }
+
+  .text-gradient-social {
+    @apply bg-gradient-to-r from-social-500 to-social-600;
+    @apply bg-clip-text text-transparent;
+  }
+
+  /* Bordes animados */
+  .border-animated {
+    @apply relative overflow-hidden;
+  }
+
+  .border-animated::before {
+    content: "";
+    @apply absolute inset-0 bg-gradient-to-r from-productivity-500 via-creative-500 to-health-500;
+    @apply animate-spin-slow;
+  }
+
+  .border-animated::after {
+    content: "";
+    @apply absolute inset-[2px] bg-background-primary rounded-lg;
+  }
+
+  /* Efectos de partículas */
+  .particle {
+    @apply absolute w-1 h-1 bg-productivity-400 rounded-full;
+    @apply animate-pulse;
+  }
+
+  /* Modo oscuro específico */
+  .dark .card-game {
+    @apply bg-background-secondary border-background-card;
+  }
+
+  .dark .btn-game {
+    @apply shadow-game-dark hover:shadow-game-glow-dark;
+  }
+
+  /* Responsive utilities */
+  .container-game {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Grid layouts */
+  .grid-game {
+    @apply grid gap-6;
+  }
+
+  .grid-game-2 {
+    @apply grid-game grid-cols-1 sm:grid-cols-2;
+  }
+
+  .grid-game-3 {
+    @apply grid-game grid-cols-1 sm:grid-cols-2 lg:grid-cols-3;
+  }
+
+  .grid-game-4 {
+    @apply grid-game grid-cols-1 sm:grid-cols-2 lg:grid-cols-4;
+  }
+
+  /* Flexbox utilities */
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+
+  .flex-between {
+    @apply flex items-center justify-between;
+  }
+
+  .flex-start {
+    @apply flex items-center justify-start;
+  }
+
+  .flex-end {
+    @apply flex items-center justify-end;
+  }
+}
+
+@layer utilities {
+  /* Utilidades personalizadas */
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .text-shadow-lg {
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .backdrop-blur-xs {
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+  }
+
+  .backdrop-blur-sm {
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+  }
+
+  .backdrop-blur-md {
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+
+  .backdrop-blur-lg {
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+  }
+
+  /* Animaciones personalizadas */
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  .animate-wiggle {
+    animation: wiggle 1s ease-in-out infinite;
+  }
+
+  /* Transiciones personalizadas */
+  .transition-game {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .transition-game-slow {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .transition-game-fast {
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+/* Fuentes personalizadas */
+@font-face {
+  font-family: "Orbitron";
+  src: url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
+  font-display: swap;
+}
+
+/* Variables CSS personalizadas */
+:root {
+  --color-productivity: #2563eb;
+  --color-health: #16a34a;
+  --color-creative: #9333ea;
+  --color-social: #ec4899;
+  --color-game-xp: #fbbf24;
+  --color-game-he: #10b981;
+  --color-game-ml: #f59e0b;
+
+  --shadow-game: 0 0 20px rgba(37, 99, 235, 0.5);
+  --shadow-game-glow: 0 0 30px rgba(37, 99, 235, 0.8);
+  --shadow-success: 0 0 20px rgba(22, 163, 74, 0.5);
+  --shadow-warning: 0 0 20px rgba(245, 158, 11, 0.5);
+  --shadow-error: 0 0 20px rgba(239, 68, 68, 0.5);
+}
+
+/* Modo oscuro */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --shadow-game: 0 0 20px rgba(37, 99, 235, 0.3);
+    --shadow-game-glow: 0 0 30px rgba(37, 99, 235, 0.6);
+  }
+}
